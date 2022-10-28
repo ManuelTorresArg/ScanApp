@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ScanApp</string>
+    <string name="login_user_name">Nombre de Usuario</string>
+    <string name="login_password">Ingrese su contraseña</string>
+</resources>
