@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="50dp">
+
+    <TextView
+        android:id="@+id/txt_config_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configuración"
+        android:textColor="#000000"
+        android:textSize="40dp"
+        android:textStyle="bold"/>
+
+    <CheckBox
+        android:id="@+id/chk_continuo"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan Continuo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Permite escanear secuencialmente" />
+
+    <CheckBox
+        android:id="@+id/chk_sumariza"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sumariza" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Suma a cantidades los scans de productos similares" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="Exporta" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sistema a exportar" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioButton_Ventas"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ventas" />
+
+        <RadioButton
+            android:id="@+id/radioButton_Avanza"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Avanza" />
+
+        <RadioButton
+            android:id="@+id/radioButton_Custom"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Custom" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo de Exportación" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A carpeta" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Compartir" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Carpetas" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RadioButton
+            android:id="@+id/radioButton7"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Documentos" />
+
+        <RadioButton
+            android:id="@+id/radioButton8"
+            android:layout_marginStart ="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descargas" />
+    </RadioGroup>
+
+
+</LinearLayout>

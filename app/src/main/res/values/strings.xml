@@ -2,4 +2,12 @@
     <string name="app_name">ScanApp</string>
     <string name="login_user_name">Nombre de Usuario</string>
     <string name="login_password">Ingrese su contraseña</string>
+    <string name="welcome">¡Bienvenido!</string>
+    <string name="search">Buscar</string>
+    <string name="more">Mas....</string>
+    <string name="scan">Escanear código de barras</string>
+    <string name="title_config">Configuración</string>
+    <string name="menu_config">Configuración</string>
+    <string name="menu_export">Exportar</string>
+    <string name="menu_limpiar">Limpiar</string>
 </resources>
