@@ -31,6 +31,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/Salir"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="@string/menu_salir"
+        app:contentDescription="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/more"
         android:title="@string/more"
         app:contentDescription="@string/more"

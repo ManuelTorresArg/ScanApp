@@ -94,7 +94,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/config_btn_config_custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Configurar Custom"
@@ -160,6 +160,32 @@
             android:layout_height="wrap_content"
             android:text="Descargas" />
     </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginStart="40dp">
+
+        <Button
+            android:id="@+id/config_btn_aceptar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo_botones_negro"
+            android:text="@string/boton_aceptar"
+            android:textColor="#FFFFFF"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/config_btn_cancelar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/fondo_botones_negro"
+            android:text="@string/boton_cancelar"
+            android:textColor="#FFFFFF"
+            style="?android:attr/buttonBarButtonStyle" />
+    </LinearLayout>
 
 
 </LinearLayout>

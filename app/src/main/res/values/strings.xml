@@ -10,4 +10,7 @@
     <string name="menu_config">Configuración</string>
     <string name="menu_export">Exportar</string>
     <string name="menu_limpiar">Limpiar</string>
+    <string name="menu_salir">Cerrar Sesión</string>
+    <string name="boton_aceptar">Aceptar</string>
+    <string name="boton_cancelar">Cancelar</string>
 </resources>
