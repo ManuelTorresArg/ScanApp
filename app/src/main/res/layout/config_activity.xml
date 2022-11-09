@@ -66,6 +66,7 @@
         android:layout_marginStart="50dp"/>
 
     <RadioGroup
+        android:id="@+id/radio_group_Sistema"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp">
@@ -114,19 +115,20 @@
         android:layout_marginStart="50dp"/>
 
     <RadioGroup
+        android:id="@+id/radio_group_TipoExport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp">
 
         <RadioButton
-            android:id="@+id/radioButton4"
+            android:id="@+id/radioButton_carpeta"
             android:layout_marginStart ="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="A carpeta" />
 
         <RadioButton
-            android:id="@+id/radioButton5"
+            android:id="@+id/radioButton_compartir"
             android:layout_marginStart ="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,19 +144,20 @@
         android:layout_marginStart="50dp"/>
 
     <RadioGroup
+        android:id="@+id/radio_group_Destino"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp">
 
         <RadioButton
-            android:id="@+id/radioButton7"
+            android:id="@+id/radioButton_documentos"
             android:layout_marginStart ="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Documentos" />
 
         <RadioButton
-            android:id="@+id/radioButton8"
+            android:id="@+id/radioButton_descargas"
             android:layout_marginStart ="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

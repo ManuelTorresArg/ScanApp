@@ -35,7 +35,6 @@
                 android:id="@+id/spinner_cabys"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="30dp"
-
                 android:entries="@array/spinnerItems"
 
                 />
@@ -196,7 +195,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/btn_aceptar"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/fondo_botones_negro"
@@ -205,7 +204,7 @@
                     style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/btn_cancelar"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
