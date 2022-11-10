@@ -28,10 +28,11 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/scan"
-        app:layout_anchor="@id/bottomAppBar"
 
+        app:layout_anchor="@id/bottomAppBar"
         app:srcCompat="@drawable/ic_baseline_qr_code_scanner_24" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
