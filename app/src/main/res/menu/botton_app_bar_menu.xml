@@ -24,10 +24,17 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/Limpiar"
+        android:id="@+id/limpiar"
         android:icon="@drawable/ic_baseline_delete_24"
         android:title="@string/menu_limpiar"
         app:contentDescription="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/salir"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="Salir"
+        app:contentDescription="Salir"
         app:showAsAction="ifRoom" />
 
     <item

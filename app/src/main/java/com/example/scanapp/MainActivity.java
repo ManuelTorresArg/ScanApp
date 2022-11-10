@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                         Intent myIntent = new Intent(MainActivity.this,ConfigActivity.class);
                         MainActivity.this.startActivity(myIntent);
                         break;
+                    case R.id.salir:
+
                 }
 
 
