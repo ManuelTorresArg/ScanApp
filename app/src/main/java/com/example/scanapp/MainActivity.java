@@ -8,11 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.scanapp.databinding.ConfigActivityBinding;
+
 import com.example.scanapp.databinding.MainActivityBinding;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +51,45 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        binding.btnScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(
+                        MainActivity.this
+                );
+                //setear pregunta
+                intentIntegrator.setPrompt("Para flash use volumen arriba");
+                //Seter beep
+                intentIntegrator.setBeepEnabled(true);
+                //lock orientación
+                intentIntegrator.setOrientationLocked(true);
+                //Setear actividad de captura
+                intentIntegrator.setCaptureActivity(Capture.class);
+                //Iniciar Scan
+                intentIntegrator.initiateScan();
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        Inicializamos resultado pero solo si recibo data desde la activity EDIT verificando el EDIT_ACTIVITY_REQUEST_CODE que le definimos
+
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(
+                requestCode, resultCode, data);
+        //Toma en contenido de el intent y lo pone en el edittext
+        if (intentResult.getContents() != null) {
+
+            Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_SHORT).show();
+
+        } else {
+            //Cuando el contenido del resultado es null
+            Toast.makeText(getApplicationContext(), "Error, contenido nulo", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
