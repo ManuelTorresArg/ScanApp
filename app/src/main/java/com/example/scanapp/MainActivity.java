@@ -14,18 +14,20 @@ import androidx.appcompat.widget.Toolbar;
 
 
 import com.example.scanapp.databinding.MainActivityBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
     MainActivityBinding binding;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.main_activity);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.startActivity(myIntent);
                         break;
                     case R.id.salir:
+                        mAuth.signOut();
+                        break;
 
                 }
 
