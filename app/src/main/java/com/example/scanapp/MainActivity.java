@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.salir:
                         mAuth.signOut();
+                        finish();
                         break;
 
                 }
