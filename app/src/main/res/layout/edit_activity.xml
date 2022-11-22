@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_config_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editar Producto"
+            android:textColor="#000000"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:layout_marginStart="50dp"/>
+
+        <TextView
+            android:id="@+id/txt_Articulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_articulo" />
+
+        <EditText
+            android:id="@+id/edt_Articulo"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_Cabys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_cabys" />
+
+        <EditText
+            android:id="@+id/edt_Cabys"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_CodBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_codbar" />
+
+        <EditText
+            android:id="@+id/edt_CodBar"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_impuesto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_impuesto" />
+
+        <EditText
+            android:id="@+id/edt_Impuesto"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_Cantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_cantidad" />
+
+        <EditText
+            android:id="@+id/edt_Cantidad"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <SeekBar
+            android:id="@+id/seekBar_Cantidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txt_Bodega"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_bodega" />
+
+        <EditText
+            android:id="@+id/edt_Bodega"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_PrecioCompra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_preciocompra" />
+
+        <EditText
+            android:id="@+id/edt_PrecioCompra"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/txt_PrecioVenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_articulo_precioventa" />
+
+        <EditText
+            android:id="@+id/edt_PrecioVenta"
+            android:background="@drawable/fondo_edit_gris_suave"
+            android:gravity="right"
+            android:paddingRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+
+
+
+            <Button
+                android:id="@+id/btn_edit_aceptar"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fondo_botones_negro"
+                android:text="@string/boton_aceptar"
+                android:textColor="#FFFFFF"
+                style="?android:attr/buttonBarButtonStyle" />
+
+            <Button
+                android:id="@+id/btn_edit_cancelar"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/fondo_botones_negro"
+                android:text="@string/boton_cancelar"
+                android:textColor="#FFFFFF"
+                style="?android:attr/buttonBarButtonStyle" />
+
+            <Button
+                android:id="@+id/btn_edit_borrar"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/fondo_botones_negro"
+                android:text="@string/boton_borrar"
+                android:textColor="#FFFFFF"
+                style="?android:attr/buttonBarButtonStyle"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

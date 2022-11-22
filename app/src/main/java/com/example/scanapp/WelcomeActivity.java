@@ -36,9 +36,9 @@ public class WelcomeActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                finish();
                 Intent myIntent = new Intent(WelcomeActivity.this,MainActivity.class);
                 WelcomeActivity.this.startActivity(myIntent);
+                finish();
             }
         }, 2000);   //5 seconds
     }
