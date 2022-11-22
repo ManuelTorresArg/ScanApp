@@ -13,4 +13,13 @@
     <string name="menu_salir">Cerrar Sesión</string>
     <string name="boton_aceptar">Aceptar</string>
     <string name="boton_cancelar">Cancelar</string>
+    <string name="boton_borrar">Borrar</string>
+    <string name="edit_articulo_articulo">Artículo</string>
+    <string name="edit_articulo_cabys">Cabys</string>
+    <string name="edit_articulo_codbar">Código de Barras</string>
+    <string name="edit_articulo_impuesto">Impuesto</string>
+    <string name="edit_articulo_cantidad">Cantidad</string>
+    <string name="edit_articulo_bodega">Bodega</string>
+    <string name="edit_articulo_preciocompra">Precio de Compra</string>
+    <string name="edit_articulo_precioventa">Precio de Venta</string>
 </resources>

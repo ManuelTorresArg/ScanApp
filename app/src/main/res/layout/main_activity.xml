@@ -10,29 +10,49 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="100dp">
+        <!---
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/lv_Datos"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_below="@+id/edt_CodigoArticulo"
+                    android:layout_marginTop="40dp">
+
+                </ListView>
+
+
+
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint = "#172361"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        app:navigationIcon="@drawable/ic_baseline_menu_book"
-        app:menu="@menu/botton_app_bar_menu"
-        />
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:backgroundTint = "#172361"
+                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+                app:navigationIcon="@drawable/ic_baseline_menu_book"
+                app:menu="@menu/botton_app_bar_menu"
+                />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/scan"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/scan"
 
-        app:layout_anchor="@id/bottomAppBar"
-        app:srcCompat="@drawable/ic_baseline_qr_code_scanner_24" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                app:layout_anchor="@id/bottomAppBar"
+                app:srcCompat="@drawable/ic_baseline_qr_code_scanner_24" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
