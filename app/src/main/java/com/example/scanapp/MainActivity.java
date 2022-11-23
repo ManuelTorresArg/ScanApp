@@ -233,6 +233,18 @@ public class MainActivity extends AppCompatActivity {
                             //Guarda el response en un jsonobject
                             JSONObject objResponse = new JSONObject(response.toString());
                             ContentValues values = new ContentValues();
+
+                            String[] descriptionsArray = objResponse.getString("DESCRIPCION").replaceFirst("-"," ").split("-");
+
+                            Log.i("TAG", "onResponse: "+descriptionsArray.toString());
+
+                            //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description
+                           /* if(descriptionsArray.length > 1) {
+                                Intent myIntent = new Intent(MainActivity.this,CustomDescription.class);
+                                MainActivity.this.startActivity(myIntent);
+                            }*/
+
+
                             //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
                             if (ExisteCabys(objResponse.getString("CABYS")) && checkCheckBoxStatus("sumariza")) {
 
