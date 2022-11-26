@@ -21,10 +21,14 @@ public class CustomDescription extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        for (int i = 1; i <= 5; i++) {
+        String[] descripciones = getIntent().getStringArrayExtra("DESCRIPCIONES");
+
+       //getIntent().getStringExtra("DESCRIPCIONES");
+
+        for (int i = 0; i < descripciones.length; i++) {
             RadioButton rdbtn = new RadioButton(this);
             rdbtn.setId(View.generateViewId());
-            rdbtn.setText("Radio " + rdbtn.getId());
+            rdbtn.setText("Radio " + descripciones[i].toString());
             binding.descriptionGroup.addView(rdbtn);
         }
 

@@ -236,44 +236,45 @@ public class MainActivity extends AppCompatActivity {
 
                             String[] descriptionsArray = objResponse.getString("DESCRIPCION").replaceFirst("-"," ").split("-");
 
-                            Log.i("TAG", "onResponse: "+descriptionsArray.toString());
+                            Log.i("TAG", "onResponse: "+objResponse.getString("DESCRIPCION"));
 
                             //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description
-                           /* if(descriptionsArray.length > 1) {
+                           if(descriptionsArray.length > 1) {
                                 Intent myIntent = new Intent(MainActivity.this,CustomDescription.class);
+                                myIntent.putExtra("DESCRIPCIONES",descriptionsArray);
                                 MainActivity.this.startActivity(myIntent);
-                            }*/
-
-
-                            //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
-                            if (ExisteCabys(objResponse.getString("CABYS")) && checkCheckBoxStatus("sumariza")) {
-
-                                String dbQuery = "UPDATE "+FeedReaderContract.FeedEntry.TABLE_NAME+" SET CANTIDAD = CANTIDAD +1 WHERE CABYS=\"" + objResponse.getString("CABYS") + "\"";
-                                db.execSQL(dbQuery);
-
-                            } else {
-                                //Genera los values que serán ingresados a la BD y parsea el contenido del jsonObject en los campos
-
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
-
-                                //Si actualiza Inventario está on
-                                if (checkCheckBoxStatus("sumariza")) {
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "1");
-                                } else {
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
-                                }
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, "0");
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, "0");
-                                values.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, "0");
-
-                                //Ejecuta el ingreso a la BD
-                                //long newRowId =
-                                db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
                             }
 
+                            if (objResponse.getString("CABYS").toString() != "ERROR") {
+                                //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
+                                if (ExisteCabys(objResponse.getString("CABYS")) && checkCheckBoxStatus("sumariza")) {
+
+                                    String dbQuery = "UPDATE " + FeedReaderContract.FeedEntry.TABLE_NAME + " SET CANTIDAD = CANTIDAD +1 WHERE CABYS=\"" + objResponse.getString("CABYS") + "\"";
+                                    db.execSQL(dbQuery);
+
+                                } else {
+                                    //Genera los values que serán ingresados a la BD y parsea el contenido del jsonObject en los campos
+
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
+
+                                    //Si actualiza Inventario está on
+                                    if (checkCheckBoxStatus("sumariza")) {
+                                        values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "1");
+                                    } else {
+                                        values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
+                                    }
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, "0");
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, "0");
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, "0");
+
+                                    //Ejecuta el ingreso a la BD
+                                    //long newRowId =
+                                    db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+                                }
+                            }
                         } catch(JSONException e){
                             e.printStackTrace();
                         }
