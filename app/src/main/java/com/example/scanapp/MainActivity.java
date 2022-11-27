@@ -1,5 +1,6 @@
 package com.example.scanapp;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     MainActivityBinding binding;
     private FirebaseAuth mAuth;
     public String scanResult;
+    public String CustomDescription;
 
     //Creamos el request code del activity edit
     private static final int EDIT_ACTIVITY_REQUEST_CODE = 1;
@@ -185,22 +187,37 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 //        Inicializamos resultado pero solo si recibo data desde la activity EDIT verificando el EDIT_ACTIVITY_REQUEST_CODE que le definimos
 
+        Log.i("TAG", "onActivityResult: "+resultCode);
+
         IntentResult intentResult = IntentIntegrator.parseActivityResult(
                 requestCode, resultCode, data);
         //Toma en contenido de el intent y lo pone en el edittext
         if (requestCode != 1 && requestCode != 2 ) { // Verifica q sea un result de la camara
             if (intentResult.getContents() != null) {
 
+                Log.i("TAG", "onActivityResult: Camara");
+
                 scanResult = intentResult.getContents();
                 BuscaArticulo(scanResult);
 
-                Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_SHORT).show();
+                // Muestra El contenido, en este caso CODEBAR
+                //Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_SHORT).show();
 
             } else {
                 //Cuando el contenido del resultado es null
                 Toast.makeText(getApplicationContext(), "Error, contenido nulo", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == 2) {
+            Log.i("TAG", "onActivityResult: CustomDescription");
+            if(resultCode == Activity.RESULT_OK){
+                Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
+                Log.i("TAG", "onActivityResult: IntentResult - "+intentResult.getContents());
+                CustomDescription=data.getStringExtra("descripcion");
+                Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+CustomDescription);
+            }
         }
+        RenderStringView ();
+
     }
 
     public void BuscaArticulo(String codigo) {
@@ -223,6 +240,9 @@ public class MainActivity extends AppCompatActivity {
 
                         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
 
+                        //Variable dende guardaremos la descripción
+                        String MiDescripcion;
+
                         //Agrega a datos la respuesta
                         datos.add(response.toString());
 
@@ -238,12 +258,20 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.i("TAG", "onResponse: "+objResponse.getString("DESCRIPCION"));
 
-                            //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description
+                            //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description, si no carga el
                            if(descriptionsArray.length > 1) {
-                                Intent myIntent = new Intent(MainActivity.this,CustomDescription.class);
-                                myIntent.putExtra("DESCRIPCIONES",descriptionsArray);
-                                MainActivity.this.startActivity(myIntent);
-                            }
+                                Intent customDescription = new Intent(MainActivity.this,CustomDescription.class);
+                               customDescription.putExtra("DESCRIPCIONES",descriptionsArray);
+
+                               startActivityForResult(customDescription,DESCRIPTION_SELECT_REQUEST_CODE);
+
+                               MiDescripcion = CustomDescription;
+
+                            } else {
+
+                               MiDescripcion = descriptionsArray[0];
+
+                           }
 
                             if (objResponse.getString("CABYS").toString() != "ERROR") {
                                 //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
@@ -256,7 +284,11 @@ public class MainActivity extends AppCompatActivity {
                                     //Genera los values que serán ingresados a la BD y parsea el contenido del jsonObject en los campos
 
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
+
+                                    //Reemplazamos el objhect response descripcion por el string generado
+                                    //values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, MiDescripcion);
+
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
 

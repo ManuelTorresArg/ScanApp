@@ -1,5 +1,7 @@
 package com.example.scanapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
@@ -28,9 +30,31 @@ public class CustomDescription extends AppCompatActivity {
         for (int i = 0; i < descripciones.length; i++) {
             RadioButton rdbtn = new RadioButton(this);
             rdbtn.setId(View.generateViewId());
-            rdbtn.setText("Radio " + descripciones[i].toString());
+            rdbtn.setText(descripciones[i].toString().toUpperCase());
             binding.descriptionGroup.addView(rdbtn);
         }
+
+        binding.btnCustomAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int selectedButton = binding.descriptionGroup.getCheckedRadioButtonId();
+                View radioButton = binding.descriptionGroup.findViewById(selectedButton);
+                int idx = binding.descriptionGroup.indexOfChild(radioButton);
+
+                RadioButton r = (RadioButton) binding.descriptionGroup.getChildAt(idx);
+                String selectedtext = r.getText().toString();
+
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("descripcion",selectedtext);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+
+
+
+            }
+        });
 
 
 
