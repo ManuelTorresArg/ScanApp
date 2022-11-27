@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     MainActivityBinding binding;
     private FirebaseAuth mAuth;
     public String scanResult;
-    public String CustomDescription;
+    public static String CustomDescription;
 
     //Creamos el request code del activity edit
     private static final int EDIT_ACTIVITY_REQUEST_CODE = 1;
@@ -210,10 +210,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == 2) {
             Log.i("TAG", "onActivityResult: CustomDescription");
             if(resultCode == Activity.RESULT_OK){
-                Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
-                Log.i("TAG", "onActivityResult: IntentResult - "+intentResult.getContents());
                 CustomDescription=data.getStringExtra("descripcion");
                 Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+CustomDescription);
+                Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
+                Log.i("TAG", "onActivityResult: IntentResult - "+intentResult.getContents());
+
+
             }
         }
         RenderStringView ();
@@ -266,10 +268,12 @@ public class MainActivity extends AppCompatActivity {
                                startActivityForResult(customDescription,DESCRIPTION_SELECT_REQUEST_CODE);
 
                                MiDescripcion = CustomDescription;
+                               Log.i("TAG", "onResponse con Array: "+MiDescripcion);
 
                             } else {
 
                                MiDescripcion = descriptionsArray[0];
+                               Log.i("TAG", "onResponse Sin Array: "+MiDescripcion);
 
                            }
 

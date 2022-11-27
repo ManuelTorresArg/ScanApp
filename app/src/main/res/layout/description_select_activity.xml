@@ -32,37 +32,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_custom_aceptar"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/fondo_botones_negro"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/boton_aceptar"
-                    android:textColor="#FFFFFF" />
-
-                <Button
-                    android:id="@+id/btn_custom_cancelar"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/fondo_botones_negro"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/boton_cancelar"
-                    android:textColor="#FFFFFF" />
-            </LinearLayout>
         </RadioGroup>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_custom_aceptar"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fondo_botones_negro"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/boton_aceptar"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btn_custom_cancelar"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/fondo_botones_negro"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/boton_cancelar"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
 
     </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
