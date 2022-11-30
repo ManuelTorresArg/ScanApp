@@ -1,5 +1,6 @@
 package com.example.scanapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -77,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         RenderStringView();
 
         sharedpreferences=getApplicationContext().getSharedPreferences("Preferences", 0);
-
 
         binding.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -207,14 +207,32 @@ public class MainActivity extends AppCompatActivity {
                 //Cuando el contenido del resultado es null
                 Toast.makeText(getApplicationContext(), "Error, contenido nulo", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == 2) {
+        } else if (requestCode == DESCRIPTION_SELECT_REQUEST_CODE) {
             Log.i("TAG", "onActivityResult: CustomDescription");
             if(resultCode == Activity.RESULT_OK){
-                CustomDescription=data.getStringExtra("descripcion");
-                Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+CustomDescription);
-                Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
-                Log.i("TAG", "onActivityResult: IntentResult - "+intentResult.getContents());
 
+                String MyCodbar = data.getStringExtra("codbar");
+                String MyDescription = data.getStringExtra("descripcion");
+                Log.i("TAG", "MyCodbar: "+MyCodbar);
+                Log.i("TAG", "MyDescription: "+MyDescription);
+
+                String MySql = "UPDATE TABLE tb_articulos set ARTICULO =\'"+MyDescription+"\' WHERE CODBAR="+MyCodbar;
+
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                db.execSQL(MySql);
+
+                /*ContentValues values = new ContentValues();
+
+                values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, MyDescription);
+
+                //Ejecuta el ingreso a la BD
+                long newRowId = db.update(FeedReaderContract.FeedEntry.TABLE_NAME, values , "CODBAR = ?", new String[]{MyCodbar});*/
+
+                finish();
+                //CustomDescription=data.getStringExtra("descripcion");
+                Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+MyDescription);
+                Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
 
             }
         }
@@ -256,26 +274,6 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject objResponse = new JSONObject(response.toString());
                             ContentValues values = new ContentValues();
 
-                            String[] descriptionsArray = objResponse.getString("DESCRIPCION").replaceFirst("-"," ").split("-");
-
-                            Log.i("TAG", "onResponse: "+objResponse.getString("DESCRIPCION"));
-
-                            //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description, si no carga el
-                           if(descriptionsArray.length > 1) {
-                                Intent customDescription = new Intent(MainActivity.this,CustomDescription.class);
-                               customDescription.putExtra("DESCRIPCIONES",descriptionsArray);
-
-                               startActivityForResult(customDescription,DESCRIPTION_SELECT_REQUEST_CODE);
-
-                               MiDescripcion = CustomDescription;
-                               Log.i("TAG", "onResponse con Array: "+MiDescripcion);
-
-                            } else {
-
-                               MiDescripcion = descriptionsArray[0];
-                               Log.i("TAG", "onResponse Sin Array: "+MiDescripcion);
-
-                           }
 
                             if (objResponse.getString("CABYS").toString() != "ERROR") {
                                 //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
@@ -291,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //Reemplazamos el objhect response descripcion por el string generado
                                     //values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, MiDescripcion);
+                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
 
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
@@ -314,6 +312,18 @@ public class MainActivity extends AppCompatActivity {
                         } catch(JSONException e){
                             e.printStackTrace();
                         }
+
+                        //Si el array de descripciones contiene mas de 1 elemento muestra Custom Description, si no carga el
+
+
+                        if(GetDescripcion(codigo).length>1) {
+                            Intent customDescription = new Intent(MainActivity.this,CustomDescription.class);
+                            customDescription.putExtra("DESCRIPCIONES",GetDescripcion(codigo));
+                            customDescription.putExtra("CODBAR",codigo);
+
+                            startActivityForResult(customDescription,DESCRIPTION_SELECT_REQUEST_CODE);
+                        }
+
                         RenderStringView ();
 
                     }
@@ -335,6 +345,26 @@ public class MainActivity extends AppCompatActivity {
         } catch(NumberFormatException e){
             return false;
         }
+    }
+
+    public String[] GetDescripcion(String codbar) {
+
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String dbQuery = "SELECT ARTICULO FROM "+FeedReaderContract.FeedEntry.TABLE_NAME+" WHERE codbar=" + codbar;
+
+        Cursor cursor = db.rawQuery(dbQuery, null);
+        cursor.moveToFirst();
+
+        String descripcion;
+        descripcion = cursor.getString(cursor.getColumnIndex("ARTICULO"));
+
+        Toast.makeText(this, descripcion, Toast.LENGTH_SHORT).show();
+
+
+        return descripcion.replaceFirst("-"," ").split("-");
+
     }
 
     public boolean ExisteCabys(String cabys) {

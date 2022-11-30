@@ -24,6 +24,7 @@ public class CustomDescription extends AppCompatActivity {
         setContentView(view);
 
         String[] descripciones = getIntent().getStringArrayExtra("DESCRIPCIONES");
+        String myCodbar = getIntent().getStringExtra("CODBAR");
 
        //getIntent().getStringExtra("DESCRIPCIONES");
 
@@ -45,9 +46,9 @@ public class CustomDescription extends AppCompatActivity {
                 RadioButton r = (RadioButton) binding.descriptionGroup.getChildAt(idx);
                 String selectedtext = r.getText().toString();
 
-
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("descripcion",selectedtext);
+                returnIntent.putExtra("codbar",myCodbar);
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
 
