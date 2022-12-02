@@ -20,7 +20,7 @@
         android:id="@+id/export"
         android:icon="@drawable/ic_baseline_export"
         android:title="@string/menu_export"
-        app:contentDescription="@string/search"
+        app:contentDescription="Export"
         app:showAsAction="ifRoom" />
 
     <item

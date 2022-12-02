@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 
 
 import com.android.volley.Request;
@@ -38,7 +41,13 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
                         mAuth.signOut();
                         finish();
                         break;
+                    case R.id.export:
+                        Exporta();
+                        break;
+
 
                 }
 
@@ -209,14 +222,16 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (requestCode == DESCRIPTION_SELECT_REQUEST_CODE) {
             Log.i("TAG", "onActivityResult: CustomDescription");
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == Activity.RESULT_OK) {
 
                 String MyCodbar = data.getStringExtra("codbar");
                 String MyDescription = data.getStringExtra("descripcion");
-                Log.i("TAG", "MyCodbar: "+MyCodbar);
-                Log.i("TAG", "MyDescription: "+MyDescription);
+                Log.i("TAG", "MyCodbar: " + MyCodbar + "MyDescription: " + MyDescription);
 
-                String MySql = "UPDATE TABLE tb_articulos set ARTICULO =\'"+MyDescription+"\' WHERE CODBAR="+MyCodbar;
+
+                String MySql = "UPDATE tb_articulos set ARTICULO =\"" + MyDescription + "\" WHERE CODBAR=" + MyCodbar;
+
+                Log.i("TAG", "MySQL: " + MySql);
 
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -487,6 +502,180 @@ public class MainActivity extends AppCompatActivity {
 
         return miJson;
 
+    }
+
+    public void Exporta () {
+        //Define el path donde van a quedar los archivos
+        //String path = Environment.getExternalStorageDirectory() + "/cabys";
+
+        SharedPreferences sharedpreferences;
+        sharedpreferences=getApplicationContext().getSharedPreferences("Preferences", 0);
+        String path;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+        //Asigna las posiciones segun el orden establecido en los sharedpreferences y según el tipo de expo
+        String estadoOrdenListado = sharedpreferences.getString("RADIO_GROUP_SISTEMA","0");
+        String estadoMetodoDescarga = sharedpreferences.getString("RADIO_GROUP_TIPO","0");
+
+        //Toma el nombre de archivo
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String nombreDeArchivo = "Export-"+date;
+
+        String cadenaExporta = "";
+
+        if (estadoMetodoDescarga.equals("0")) {
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+        } else if (estadoMetodoDescarga.equals("1")) {                           //if (sharedpreferences.getString("METODODESCARGA","1") == "1")
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+        } else {
+            path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
+            //Toast.makeText(this, "El path 1: "+path, Toast.LENGTH_SHORT).show();
+        };
+
+
+
+        //Crea dir para crear el directorio del path (cabys)
+        File dir = new File(path);
+        dir.mkdirs();
+        //Crea el archivo donde se guardan los datos
+
+        File myCVS = new File(path + "/"+nombreDeArchivo+".csv");
+
+        //ArrayList que va a popular el ListView
+        ArrayList<String> arrayDeArticulos = new ArrayList<String>();
+
+        //Conectamos a la BD
+        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME;
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Cursor que va a recorrer la BD
+        Cursor cursor = db.rawQuery(dbQuery, null);
+
+        // Genera los headers
+        if(estadoOrdenListado.equals("0")){ arrayDeArticulos.add("Cód.Cabys,Cód.Producto,Nombre Prod.,Es Servicio,Cód.Departamento,Cód.Artículo,Nombre Art.,Gravado,IV Porcentaje,Cód.Impto 2,Impuesto 2,Cód.Proveedor,Cód.Bodega,Existencias,Base Cálculo,Coeficiente 1(%),Coeficiente 2(%),Redondeo,Suma Fija,Precio Venta,Máx.Descuento,Actualiza existencia,Venta al Peso,Precio Compra,Cód.Artículo2,Cód.Artículo3,Cód.Artículo4,Ud.Medida,N° Serie,Precio manual sin impuesto inlcuido,Familia Talla,Talla,Familia Color,Color,Marca\n"); }
+        else if(estadoOrdenListado.equals("1")){ arrayDeArticulos.add("Nombre (Campo obligatorio),Código (Campo obligatorio),¿Es Servicio?,Código Proveedor,Existencias,% Descuento Máximo,Precio de venta con IVA,Porcentaje de IVA,¿Es Gravado?,Precio de compra sin IVA\n"); }
+        else { cadenaExporta = ""; }
+
+        //Cargamos el ArrayList
+        if (cursor.isBeforeFirst()) {
+            while (cursor.moveToNext()) {
+
+                if(estadoOrdenListado.equals("0")){ //Export PDV
+                    // Es esta lista se guardan los elementos que se exportaran
+                    String[] registro ={"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""};
+
+                    registro[2] = cursor.getString(0).replaceAll("[^a-zA-Z0-9]"," "); //Descripcion
+                    registro[0] = cursor.getString(1);  //CABYS
+                    registro[8] = cursor.getString(2);  //IVA
+                    registro[21] = cursor.getString(3); //CANTIDAD
+                    registro[1] = cursor.getString(4);  //CODBAR
+
+                    cadenaExporta = "";
+                    for (String s : registro) {
+                        cadenaExporta += s + ",";
+                    }
+                    cadenaExporta += "\n";
+                    arrayDeArticulos.add(cadenaExporta);
+
+                } else if(estadoOrdenListado.equals("1")){ // Export Avanza
+                    // Es esta lista se guardan los elementos que se exporaran
+                    String[] registro ={"","","","","","","","","",""};
+
+                    registro[2] = cursor.getString(0).replaceAll("[^a-zA-Z0-9]"," "); //Descripcion
+                    registro[0] = cursor.getString(1);  //CABYS
+                    registro[7] = cursor.getString(2);  //IVA
+                    registro[4] = cursor.getString(3); //CANTIDAD
+                    registro[1] = cursor.getString(4);  //CODBAR
+
+                    cadenaExporta = "";
+                    for (String s : registro) {
+                        cadenaExporta += s + ",";
+                    }
+                    cadenaExporta += "\n";
+                    arrayDeArticulos.add(cadenaExporta);
+
+                } else { // Export personalizado
+
+                    String[] registro ={"","","","","","","",""};
+
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERDESC","0"))] = cursor.getString(0).replaceAll("[^a-zA-Z0-9]"," ");
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERCABYS","1"))] = cursor.getString(1);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERIVA","2"))] = cursor.getString(2);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERCANT","3"))] = cursor.getString(3);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERCODBAR","4"))] = cursor.getString(4);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERBODEGA","5"))] = cursor.getString(5);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERCOMPRA","6"))] = cursor.getString(6);
+                    registro[Integer.parseInt(sharedpreferences.getString("SPINNERVENTA","7"))] = cursor.getString(7);
+
+                    arrayDeArticulos.add(registro[0]+","+registro[1]+","+registro[2]+","+registro[3]+","+registro[4]+","+registro[5]+","+registro[6]+","+registro[7]+"\n");
+
+//                        arrayDeArticulos.add(cursor.getString(1)+
+//                                ","+cursor.getString(0).replaceAll("[^a-zA-Z0-9]"," ")+
+//                                ","+cursor.getString(2)+","+cursor.getString(3)+"\n");
+                }
+            }}
+
+        Toast.makeText(this, (("file://"+myCVS)), Toast.LENGTH_SHORT).show();
+        Save(myCVS, arrayDeArticulos, getApplicationContext() );
+
+        if (estadoMetodoDescarga.equals("1")) {
+
+
+            if(!myCVS.exists()) {
+                Toast.makeText(this, "No file!", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Uri myCVSpath = FileProvider.getUriForFile(this, "com.example.hablaapi_2", myCVS);
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "This is one image I'm sharing.");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, myCVSpath);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, "Share..."));
+
+               /*Intent intentShare = new Intent(Intent.ACTION_SEND);
+               intentShare.setType("text/csv");
+
+               intentShare.putExtra(Intent.EXTRA_STREAM, Uri.parse(("file://"+myCVS)));
+
+               startActivity(Intent.createChooser(intentShare, "Enviar archivo exportado...."));*/
+        }
+    }
+
+
+    //Guarda Archivo
+    public static void Save(@NonNull File file, ArrayList<String> lista, Context context)  {
+
+        Toast.makeText(context, file.getPath().toString(), Toast.LENGTH_SHORT).show();
+        FileOutputStream fos = null;
+
+        try
+        {
+            fos = new FileOutputStream(file);
+        }
+        catch (FileNotFoundException e) {e.printStackTrace();}
+        try
+        {
+            try
+            {
+                for (String elem:lista)
+                {
+                    fos.write(elem.getBytes());
+                }
+                //fos.write("\n".getBytes());
+            }
+            catch (IOException e) {e.printStackTrace();}
+        }
+        finally
+        {
+            try
+            {
+                fos.close();
+            }
+            catch (IOException e) {e.printStackTrace();}
+        }
     }
 
 
