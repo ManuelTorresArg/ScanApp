@@ -619,21 +619,23 @@ public class MainActivity extends AppCompatActivity {
 
         if (estadoMetodoDescarga.equals("1")) {
 
+            Toast.makeText(this, "Compartir", Toast.LENGTH_SHORT).show();
+
 
             if(!myCVS.exists()) {
                 Toast.makeText(this, "No file!", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            Uri myCVSpath = FileProvider.getUriForFile(this, "com.example.hablaapi_2", myCVS);
+            Uri myCVSpath = FileProvider.getUriForFile(this, "com.example.scanapp", myCVS);
 
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "This is one image I'm sharing.");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Scan App Export");
             shareIntent.putExtra(Intent.EXTRA_STREAM, myCVSpath);
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.setType("text/plain");
-            startActivity(Intent.createChooser(shareIntent, "Share..."));
+            startActivity(Intent.createChooser(shareIntent, "Enviar..."));
 
                /*Intent intentShare = new Intent(Intent.ACTION_SEND);
                intentShare.setType("text/csv");
