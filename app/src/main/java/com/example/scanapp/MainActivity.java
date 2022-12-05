@@ -35,6 +35,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.scanapp.databinding.MainActivityBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -196,6 +197,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser ActiveUser = mAuth.getCurrentUser();
+
+        if(ActiveUser == null) {
+            Intent myIntent = new Intent(MainActivity.this,LoginActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        Inicializamos resultado pero solo si recibo data desde la activity EDIT verificando el EDIT_ACTIVITY_REQUEST_CODE que le definimos
@@ -215,6 +228,10 @@ public class MainActivity extends AppCompatActivity {
 
                 // Muestra El contenido, en este caso CODEBAR
                 //Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_SHORT).show();
+
+                if (sharedpreferences.getString("CHECK_CONTINUO", "1").equals("1")) {
+                    binding.btnScan.performClick();
+                }
 
             } else {
                 //Cuando el contenido del resultado es null
@@ -244,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
                 //Ejecuta el ingreso a la BD
                 long newRowId = db.update(FeedReaderContract.FeedEntry.TABLE_NAME, values , "CODBAR = ?", new String[]{MyCodbar});*/
 
-                finish();
+                //finish();
                 //CustomDescription=data.getStringExtra("descripcion");
                 Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+MyDescription);
                 Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
@@ -302,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
 
-                                    //Reemplazamos el objhect response descripcion por el string generado
+                                    //Reemplazamos el object response descripcion por el string generado
                                     //values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
                                     values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
 
@@ -510,7 +527,8 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedpreferences;
         sharedpreferences=getApplicationContext().getSharedPreferences("Preferences", 0);
-        String path;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+        String path = null;
+        //Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
         //Asigna las posiciones segun el orden establecido en los sharedpreferences y según el tipo de expo
         String estadoOrdenListado = sharedpreferences.getString("RADIO_GROUP_SISTEMA","0");
         String estadoMetodoDescarga = sharedpreferences.getString("RADIO_GROUP_TIPO","0");
@@ -521,14 +539,18 @@ public class MainActivity extends AppCompatActivity {
 
         String cadenaExporta = "";
 
+
+        //Verifica si
         if (estadoMetodoDescarga.equals("0")) {
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         } else if (estadoMetodoDescarga.equals("1")) {                           //if (sharedpreferences.getString("METODODESCARGA","1") == "1")
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
-        } else {
+        };
+
+        /*else {
             path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
             //Toast.makeText(this, "El path 1: "+path, Toast.LENGTH_SHORT).show();
-        };
+        };*/
 
 
 
@@ -595,6 +617,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else { // Export personalizado
 
+                    //Se genera un registro con los campos de exportación requeridos, luego son llenados
                     String[] registro ={"","","","","","","",""};
 
                     registro[Integer.parseInt(sharedpreferences.getString("SPINNERDESC","0"))] = cursor.getString(0).replaceAll("[^a-zA-Z0-9]"," ");
@@ -627,8 +650,10 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            //Identificador unico de recursos que define el path del archivo
             Uri myCVSpath = FileProvider.getUriForFile(this, "com.example.scanapp", myCVS);
 
+            //Definimos un intent tipo ACTION_SEND de la intent Class
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_TEXT, "Scan App Export");
@@ -637,12 +662,6 @@ public class MainActivity extends AppCompatActivity {
             shareIntent.setType("text/plain");
             startActivity(Intent.createChooser(shareIntent, "Enviar..."));
 
-               /*Intent intentShare = new Intent(Intent.ACTION_SEND);
-               intentShare.setType("text/csv");
-
-               intentShare.putExtra(Intent.EXTRA_STREAM, Uri.parse(("file://"+myCVS)));
-
-               startActivity(Intent.createChooser(intentShare, "Enviar archivo exportado...."));*/
         }
     }
 

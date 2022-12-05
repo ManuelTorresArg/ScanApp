@@ -73,8 +73,6 @@ public class ConfigActivity extends AppCompatActivity {
         binding.chkContinuo.setChecked(new String(sharedpreferences.getString("CHECK_CONTINUO", "1")).equals("1"));
         binding.chkSumariza.setChecked(new String(sharedpreferences.getString("CHECK_SUMARIZA", "1")).equals("1"));
 
-
-
         binding.radioButtonVentas.setChecked(new String(sharedpreferences.getString("RADIO_GROUP_SISTEMA", "0")).equals("0"));
         binding.radioButtonAvanza.setChecked(new String(sharedpreferences.getString("RADIO_GROUP_SISTEMA", "0")).equals("1"));
         binding.radioButtonCustom.setChecked(new String(sharedpreferences.getString("RADIO_GROUP_SISTEMA", "0")).equals("2"));
