@@ -47,6 +47,13 @@ public class ConfigActivity extends AppCompatActivity {
             }
         });
 
+        binding.configBtnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
     }
 

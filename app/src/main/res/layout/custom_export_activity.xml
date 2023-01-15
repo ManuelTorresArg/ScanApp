@@ -26,9 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp">
 
+
             <CheckBox
                 android:id="@+id/chk_cabys"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="CABYS" />
 
             <Spinner
@@ -50,7 +51,7 @@
 
             <CheckBox
                 android:id="@+id/chk_codebar"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Cod Barra" />
 
             <Spinner
@@ -71,7 +72,7 @@
 
             <CheckBox
                 android:id="@+id/chk_desc"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Descripción" />
 
             <Spinner
@@ -92,7 +93,7 @@
 
             <CheckBox
                 android:id="@+id/chk_iva"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="IVA" />
 
             <Spinner
@@ -112,7 +113,7 @@
 
             <CheckBox
                 android:id="@+id/chk_cant"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Cantidad" />
 
             <Spinner
@@ -132,7 +133,7 @@
 
             <CheckBox
                 android:id="@+id/chk_bodega"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Bodega" />
 
             <Spinner
@@ -152,7 +153,7 @@
 
             <CheckBox
                 android:id="@+id/chk_compra"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Compra" />
 
             <Spinner
@@ -172,7 +173,7 @@
 
             <CheckBox
                 android:id="@+id/chk_venta"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:text="Venta" />
 
             <Spinner

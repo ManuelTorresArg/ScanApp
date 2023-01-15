@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
@@ -89,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
 
         sharedpreferences=getApplicationContext().getSharedPreferences("Preferences", 0);
 
+        //Creamos el Alert Dialog que permite limpiar la lista de productos
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Confirma Limpiar");
+        builder.setMessage("Se Eliminaran todos los elementos");
+        builder.setPositiveButton("Confirmar",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                        db.execSQL("DELETE FROM "+FeedReaderContract.FeedEntry.TABLE_NAME) ;
+
+                        RenderStringView ();
+                    }
+                });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
         binding.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -109,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.export:
                         Exporta();
                         break;
-
+                    case  R.id.limpiar:
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
                 }
 
@@ -573,8 +601,8 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = db.rawQuery(dbQuery, null);
 
         // Genera los headers
-        if(estadoOrdenListado.equals("0")){ arrayDeArticulos.add("Cód.Cabys,Cód.Producto,Nombre Prod.,Es Servicio,Cód.Departamento,Cód.Artículo,Nombre Art.,Gravado,IV Porcentaje,Cód.Impto 2,Impuesto 2,Cód.Proveedor,Cód.Bodega,Existencias,Base Cálculo,Coeficiente 1(%),Coeficiente 2(%),Redondeo,Suma Fija,Precio Venta,Máx.Descuento,Actualiza existencia,Venta al Peso,Precio Compra,Cód.Artículo2,Cód.Artículo3,Cód.Artículo4,Ud.Medida,N° Serie,Precio manual sin impuesto inlcuido,Familia Talla,Talla,Familia Color,Color,Marca\n"); }
-        else if(estadoOrdenListado.equals("1")){ arrayDeArticulos.add("Nombre (Campo obligatorio),Código (Campo obligatorio),¿Es Servicio?,Código Proveedor,Existencias,% Descuento Máximo,Precio de venta con IVA,Porcentaje de IVA,¿Es Gravado?,Precio de compra sin IVA\n"); }
+        if(estadoOrdenListado.equals("0")){ arrayDeArticulos.add("COD.CABYS,COD.PRODUCTO,NOMBRE PROD.,ES SERVICIO,COD.DEPARTAMENTO,COD.ARTICULO,NOMBRE ART.,GRAVADO,IV PORCENTAJE,COD.IMPTO 2,IMPUESTO 2,COD.PROVEEDOR,COD.BODEGA,EXISTENCIAS,BASE CALCULO,COEFICIENTE 1(%),COEFICIENTE 2(%),REDONDEO,SUMA FIJA,PRECIO VENTA,MAX.DESCUENTO,ACTUALIZA EXISTENCIA,VENTA AL PESO,PRECIO COMPRA,COD.ARTICULO2,COD.ARTICULO3,COD.ARTICULO4,UD.MEDIDA,N° SERIE,PRECIO MANUAL SIN IMPUESTO INLCUIDO,FAMILIA TALLA,TALLA,FAMILIA COLOR,COLOR,MARCA\n"); }
+        else if(estadoOrdenListado.equals("1")){ arrayDeArticulos.add("NOMBRE (CAMPO OBLIGATORIO),CODIGO (CAMPO OBLIGATORIO),¿ES SERVICIO?,CODIGO PROVEEDOR,EXISTENCIAS,% DESCUENTO MAXIMO,PRECIO DE VENTA CON IVA,PORCENTAJE DE IVA,¿ES GRAVADO?,PRECIO DE COMPRA SIN IVA\n"); }
         else { cadenaExporta = ""; }
 
         //Cargamos el ArrayList

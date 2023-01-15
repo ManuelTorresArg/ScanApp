@@ -4,6 +4,7 @@
 
     <item
         android:id="@+id/search"
+        android:visible="false"
         android:icon="@drawable/ic_baseline_search"
         android:title="@string/search"
         app:contentDescription="@string/search"
@@ -11,28 +12,28 @@
 
     <item
         android:id="@+id/config"
-        android:icon="@drawable/ic_baseline_settings_24"
+        android:icon="@drawable/ic_baseline_settings_36"
         android:title="@string/menu_config"
         app:contentDescription="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/export"
         android:icon="@drawable/ic_baseline_export"
         android:title="@string/menu_export"
         app:contentDescription="Export"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/limpiar"
         android:icon="@drawable/ic_baseline_delete_24"
         android:title="@string/menu_limpiar"
         app:contentDescription="@string/search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/salir"
-        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:icon="@drawable/ic_baseline_exit_to_app_36"
         android:title="Salir"
         app:contentDescription="Salir"
         app:showAsAction="ifRoom" />
