@@ -46,7 +46,7 @@ public class EditActivity extends AppCompatActivity {
 
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-                db.execSQL("DELETE FROM "+FeedReaderContract.FeedEntry.TABLE_NAME+" WHERE CABYS="+binding.edtCabys.getText().toString());
+                db.execSQL("DELETE FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS +" WHERE CABYS="+binding.edtCabys.getText().toString());
 
                 finish();
 
@@ -68,7 +68,7 @@ public class EditActivity extends AppCompatActivity {
                 values.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, binding.edtPrecioVenta.getText().toString());
 
                 //Ejecuta el ingreso a la BD
-                long newRowId = db.update(FeedReaderContract.FeedEntry.TABLE_NAME, values , "CABYS = ?", new String[]{binding.edtCabys.getText().toString()});
+                long newRowId = db.update(FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS, values , "CABYS = ?", new String[]{binding.edtCabys.getText().toString()});
 
                 finish();
 

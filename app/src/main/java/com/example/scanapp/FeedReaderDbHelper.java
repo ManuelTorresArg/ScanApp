@@ -17,7 +17,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     // Creación de la BD según lo establecido en el contrato
     public void onCreate(SQLiteDatabase db) {
         //Crea tabla articulos
-        db.execSQL(FeedReaderContract.SQL_CREATE_ENTRIES);
+        db.execSQL(FeedReaderContract.SQL_CREATE_ENTRIES_ARTICULOS);
+        db.execSQL(FeedReaderContract.SQL_CREATE_ENTRIES_BD_LOCAL);
         //Crea tabla session (No en uso)
         //db.execSQL(FeedReaderContract.SQL_CREATE_SESSION);
     }

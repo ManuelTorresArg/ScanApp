@@ -1,6 +1,5 @@
 package com.example.scanapp;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-                        db.execSQL("DELETE FROM "+FeedReaderContract.FeedEntry.TABLE_NAME) ;
+                        db.execSQL("DELETE FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS) ;
 
                         RenderStringView ();
                     }
@@ -252,7 +251,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("TAG", "onActivityResult: Camara");
 
                 scanResult = intentResult.getContents();
-                BuscaArticulo(scanResult);
+
+                if (ExisteCodbarLocal(scanResult)) {
+                    AgregaArticuloDesdeBdLocal(scanResult);
+                } else {
+                    BuscaArticulo(scanResult);
+                }
 
                 // Muestra El contenido, en este caso CODEBAR
                 //Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_SHORT).show();
@@ -332,41 +336,54 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             //Guarda el response en un jsonobject
                             JSONObject objResponse = new JSONObject(response.toString());
-                            ContentValues values = new ContentValues();
+                            ContentValues values_articulos = new ContentValues();
+                            ContentValues values_bd_local = new ContentValues();
 
 
                             if (objResponse.getString("CABYS").toString() != "ERROR") {
                                 //Chequea si existe ya el cabys  en la BD (y el checkbox esta chequeado), Si es así updatea la cantidad
                                 if (ExisteCabys(objResponse.getString("CABYS")) && checkCheckBoxStatus("sumariza")) {
 
-                                    String dbQuery = "UPDATE " + FeedReaderContract.FeedEntry.TABLE_NAME + " SET CANTIDAD = CANTIDAD +1 WHERE CABYS=\"" + objResponse.getString("CABYS") + "\"";
+                                    String dbQuery = "UPDATE " + FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS + " SET CANTIDAD = CANTIDAD +1 WHERE CABYS=\"" + objResponse.getString("CABYS") + "\"";
                                     db.execSQL(dbQuery);
 
                                 } else {
                                     //Genera los values que serán ingresados a la BD y parsea el contenido del jsonObject en los campos
 
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
 
                                     //Reemplazamos el object response descripcion por el string generado
-                                    //values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
 
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
 
                                     //Si actualiza Inventario está on
                                     if (checkCheckBoxStatus("sumariza")) {
-                                        values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "1");
+                                        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "1");
                                     } else {
-                                        values.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
+                                        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
                                     }
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, "0");
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, "0");
-                                    values.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, "0");
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, "0");
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, "0");
+                                    values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, "0");
+
+                                    //Generamos entry en BD local
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, objResponse.getString("CABYS"));
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, objResponse.getString("DESCRIPCION"));
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_IVA, objResponse.getString("IMPUESTO"));
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, objResponse.getString("CODBAR"));
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, "0");
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, "0");
+                                    values_bd_local.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, "0");
+                                    //
+
 
                                     //Ejecuta el ingreso a la BD
                                     //long newRowId =
-                                    db.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+                                    db.insert(FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS, null, values_articulos);
+                                    db.insert(FeedReaderContract.FeedEntry.TABLE_NAME_BD_LOCAL, null, values_bd_local);
                                 }
                             }
                         } catch(JSONException e){
@@ -412,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String dbQuery = "SELECT ARTICULO FROM "+FeedReaderContract.FeedEntry.TABLE_NAME+" WHERE codbar=" + codbar;
+        String dbQuery = "SELECT ARTICULO FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS +" WHERE codbar=" + codbar;
 
         Cursor cursor = db.rawQuery(dbQuery, null);
         cursor.moveToFirst();
@@ -432,12 +449,58 @@ public class MainActivity extends AppCompatActivity {
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String dbQuery = "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME+" WHERE CABYS=" + cabys;
+        String dbQuery = "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS +" WHERE CABYS=" + cabys;
 
         Cursor cursor = db.rawQuery(dbQuery, null);
 
 
         return !(cursor.getCount()<=0);
+
+    }
+
+    public boolean ExisteCodbarLocal(String codbar) {
+
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String dbQuery = "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_BD_LOCAL +" WHERE CODBAR=" + codbar;
+
+        Cursor cursor = db.rawQuery(dbQuery, null);
+
+
+        return !(cursor.getCount()<=0);
+
+    }
+
+    public void AgregaArticuloDesdeBdLocal(String codbar) {
+
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ContentValues values_articulos = new ContentValues();
+
+        String dbQuery = "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_BD_LOCAL +" WHERE CODBAR=" + codbar;
+
+        Cursor cursor = db.rawQuery(dbQuery, null);
+
+        cursor.getString(3);
+
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, cursor.getString(0));
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CABYS, cursor.getString(1));
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_IVA, cursor.getString(2));
+
+        //Si actualiza Inventario está on
+        if (checkCheckBoxStatus("sumariza")) {
+            values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "1");
+        } else {
+            values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CANTIDAD, "0");
+        }
+
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_CODBAR, cursor.getString(4));
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_BODEGA, cursor.getString(5));
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_COMPRA, cursor.getString(6));
+        values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, cursor.getString(7));
+
+        db.insert(FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS, null, values_articulos);
 
     }
 
@@ -459,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
         //ArrayList <String> arrayDeArticulos = new ArrayList<String>();
 
         //Conectamos a la BD
-        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME;
+        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS;
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -517,7 +580,7 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         JSONObject miJson = new JSONObject();
         //Conectamos a la BD
-        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME;
+        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS;
 
         //ArrayList que vamos a crear para buscar
         ArrayList<String> arrayDeArticulos = new ArrayList<String>();
@@ -593,7 +656,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> arrayDeArticulos = new ArrayList<String>();
 
         //Conectamos a la BD
-        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME;
+        String dbQuery = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS;
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -726,7 +789,5 @@ public class MainActivity extends AppCompatActivity {
             catch (IOException e) {e.printStackTrace();}
         }
     }
-
-
 
 }

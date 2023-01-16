@@ -45,7 +45,6 @@
                 style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
                 app:navigationIcon="@drawable/ic_baseline_menu_book"
                 app:menu="@menu/bottom_app_bar_menu"
-                app:ItemIconSize="@dimens/bottom_app_bar_menu_icon_size"
                 />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
