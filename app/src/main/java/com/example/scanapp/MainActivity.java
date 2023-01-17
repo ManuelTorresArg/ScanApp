@@ -252,8 +252,10 @@ public class MainActivity extends AppCompatActivity {
 
                 scanResult = intentResult.getContents();
 
-                if (ExisteCodbarLocal(scanResult)) {
+                if (ExisteCodbarLocal(scanResult) && !ExisteCodBarArticulos(scanResult)) {
                     AgregaArticuloDesdeBdLocal(scanResult);
+                } else if (ExisteCodBarArticulos(scanResult)){
+                    ActualizaArticuloDesdeLocal(scanResult);
                 } else {
                     BuscaArticulo(scanResult);
                 }
@@ -286,22 +288,12 @@ public class MainActivity extends AppCompatActivity {
 
                 db.execSQL(MySql);
 
-                /*ContentValues values = new ContentValues();
-
-                values.put(FeedReaderContract.FeedEntry.COLUMN_ARTICULO, MyDescription);
-
-                //Ejecuta el ingreso a la BD
-                long newRowId = db.update(FeedReaderContract.FeedEntry.TABLE_NAME, values , "CODBAR = ?", new String[]{MyCodbar});*/
-
-                //finish();
-                //CustomDescription=data.getStringExtra("descripcion");
                 Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+MyDescription);
                 Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));
 
             }
         }
         RenderStringView ();
-
     }
 
     public void BuscaArticulo(String codigo) {
@@ -458,6 +450,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean ExisteCodBarArticulos(String codbar) {
+
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String dbQuery = "SELECT * FROM "+FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS +" WHERE CODBAR=" + codbar;
+
+        Cursor cursor = db.rawQuery(dbQuery, null);
+
+
+        return !(cursor.getCount()<=0);
+
+    }
+
     public boolean ExisteCodbarLocal(String codbar) {
 
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
@@ -469,6 +475,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         return !(cursor.getCount()<=0);
+
+    }
+
+    public void ActualizaArticuloDesdeLocal(String codbar) {
+
+        FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String dbQuery = "UPDATE " + FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS + " SET CANTIDAD = CANTIDAD +1 WHERE CODBAR=\"" + codbar + "\"";
+        db.execSQL(dbQuery);
+
+        RenderStringView ();
+
 
     }
 
@@ -501,6 +519,8 @@ public class MainActivity extends AppCompatActivity {
         values_articulos.put(FeedReaderContract.FeedEntry.COLUMN_VENTA, cursor.getString(7));
 
         db.insert(FeedReaderContract.FeedEntry.TABLE_NAME_ARTICULOS, null, values_articulos);
+
+        RenderStringView ();
 
     }
 
