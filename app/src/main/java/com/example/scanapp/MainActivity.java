@@ -252,6 +252,13 @@ public class MainActivity extends AppCompatActivity {
 
                 scanResult = intentResult.getContents();
 
+                //La bd local guarda todos los escaneos
+                //La BD de articulos es la que muestra los articulos en la pantalla principal
+
+                //Si Existe en la base de datos local pero no en la tabla de articulos agrega desde local
+                //si ya existe en articulos actualiza desde local
+                //si no lo procesa desde API remota
+
                 if (ExisteCodbarLocal(scanResult) && !ExisteCodBarArticulos(scanResult)) {
                     AgregaArticuloDesdeBdLocal(scanResult);
                 } else if (ExisteCodBarArticulos(scanResult)){
@@ -280,13 +287,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("TAG", "MyCodbar: " + MyCodbar + "MyDescription: " + MyDescription);
 
 
-                String MySql = "UPDATE tb_articulos set ARTICULO =\"" + MyDescription + "\" WHERE CODBAR=" + MyCodbar;
+                String MySqlArticulos = "UPDATE tb_articulos set ARTICULO =\"" + MyDescription + "\" WHERE CODBAR=" + MyCodbar;
+                String MySqlLocal = "UPDATE tb_dblocal set ARTICULO =\"" + MyDescription + "\" WHERE CODBAR=" + MyCodbar;
 
-                Log.i("TAG", "MySQL: " + MySql);
+
+                Log.i("TAG", "MySQL: " + MySqlArticulos);
 
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-                db.execSQL(MySql);
+                db.execSQL(MySqlArticulos);
+                db.execSQL(MySqlLocal);
 
                 Log.i("TAG", "onActivityResult: Variable CUSTOMDESCRIPTION - "+MyDescription);
                 Log.i("TAG", "onActivityResult: RESULT OK - "+data.getStringExtra("descripcion"));

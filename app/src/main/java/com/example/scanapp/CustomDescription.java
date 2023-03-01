@@ -23,6 +23,7 @@ public class CustomDescription extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        //guarda el contenido de las descripciones en un array (descripciones) separados
         String[] descripciones = getIntent().getStringArrayExtra("DESCRIPCIONES");
         String myCodbar = getIntent().getStringExtra("CODBAR");
 
