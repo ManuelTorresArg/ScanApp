@@ -391,6 +391,18 @@ public class MainActivity extends AppCompatActivity {
                             customDescription.putExtra("CODBAR",codigo);
 
                             startActivityForResult(customDescription,DESCRIPTION_SELECT_REQUEST_CODE);
+                        } else {
+
+                            Toast.makeText(MainActivity.this, GetDescripcion(codigo)[0], Toast.LENGTH_SHORT).show();
+
+                            /*String MySql = "UPDATE tb_articulos set ARTICULO =\"" + .toUpperCase().substring(1) + "\" WHERE CODBAR=" + codigo;
+
+                            Log.i("TAG", "MySQL: " + MySql);
+
+                            SQLiteDatabase dbDesc = dbHelper.getWritableDatabase();
+
+                            dbDesc.execSQL(MySql);*/
+
                         }
 
                         RenderStringView ();
