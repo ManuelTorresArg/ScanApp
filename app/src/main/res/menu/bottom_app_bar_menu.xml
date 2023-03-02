@@ -32,6 +32,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/internaldb"
+        android:title="Datos Locales"
+        app:contentDescription="Datos Locales"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/salir"
         android:icon="@drawable/ic_baseline_exit_to_app_36"
         android:title="Salir"
