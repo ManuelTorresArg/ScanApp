@@ -405,14 +405,15 @@ public class MainActivity extends AppCompatActivity {
 
                             Toast.makeText(MainActivity.this, GetDescripcion(codigo)[0], Toast.LENGTH_SHORT).show();
 
-                            /*String MySql = "UPDATE tb_articulos set ARTICULO =\"" + .toUpperCase().substring(1) + "\" WHERE CODBAR=" + codigo;
+                            String MySql = "UPDATE tb_articulos set ARTICULO =\"" + GetDescripcion(codigo)[0].toUpperCase().substring(1) + "\" WHERE CODBAR=" + codigo;
+                            String MySqlLocal = "UPDATE tb_dblocal set ARTICULO =\"" + GetDescripcion(codigo)[0].toUpperCase().substring(1) + "\" WHERE CODBAR=" + codigo;
 
                             Log.i("TAG", "MySQL: " + MySql);
 
                             SQLiteDatabase dbDesc = dbHelper.getWritableDatabase();
 
-                            dbDesc.execSQL(MySql);*/
-
+                            dbDesc.execSQL(MySql);
+                            dbDesc.execSQL(MySqlLocal);
                         }
 
                         RenderStringView ();
