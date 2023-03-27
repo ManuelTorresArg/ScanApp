@@ -1,5 +1,6 @@
 package com.example.scanapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -124,12 +125,16 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Announcement", "Received Search");
                         break;
                     case R.id.config:
-                        Intent myIntent = new Intent(MainActivity.this,ConfigActivity.class);
-                        MainActivity.this.startActivity(myIntent);
+                        Intent myIntentConfig = new Intent(MainActivity.this,ConfigActivity.class);
+                        MainActivity.this.startActivity(myIntentConfig);
                         break;
                     case R.id.salir:
                         mAuth.signOut();
                         finish();
+                        break;
+                    case R.id.internaldb:
+                        Intent myIntentInternalDB = new Intent(MainActivity.this,InternalBD.class);
+                        MainActivity.this.startActivity(myIntentInternalDB);
                         break;
                     case R.id.export:
                         Exporta();
@@ -439,6 +444,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("Range")
     public String[] GetDescripcion(String codbar) {
 
         FeedReaderDbHelper dbHelper = new FeedReaderDbHelper(MainActivity.this);
@@ -595,10 +601,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding.lvDatos.setAdapter(simpleAdapter);
 
-
     }
 
-    private SimpleAdapter getAdapterListViewNombreCorreo(ArrayList<Map<String, Object>> listaUsuarios){
+   /* private SimpleAdapter getAdapterListViewNombreCorreo(ArrayList<Map<String, Object>> listaUsuarios){
         return new SimpleAdapter(this, listaUsuarios,
                 android.R.layout.simple_list_item_2, new String[]{"Nombre", "Correo"},
                 new int[]{android.R.id.text1, android.R.id.text2}){
@@ -615,7 +620,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-    }
+    }*/
 
     public static JSONObject onGetIndex(int index, Context context) {
 

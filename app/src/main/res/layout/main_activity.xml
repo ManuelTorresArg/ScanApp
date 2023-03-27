@@ -27,13 +27,10 @@
                     android:layout_height="400dp"
                     android:layout_below="@+id/edt_CodigoArticulo"
                     android:layout_marginTop="40dp">
-
                 </ListView>
 
-
-
-
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
             <com.google.android.material.bottomappbar.BottomAppBar
